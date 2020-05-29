@@ -7,12 +7,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 
-// 
-// Decompiled by Procyon v0.5.36
-// 
-
 public class JWindow
 {
+    // INSTANCE VARIABLES
     private JFrame _frame;
     private JPanel _pan;
     private JPanel _pan2;
@@ -23,23 +20,33 @@ public class JWindow
     private JLabel _lab5;
     private JButton _btn;
     
+    // CONSTRUCTOR
     public JWindow() {
         this.setupButtons();
         this.setupPanels();
         this.setupFrame();
     }
     
+    /*
+	 * This method sets up the frame. 
+	 */
     private void setupFrame() {
         (this._frame = new JFrame("My Program")).setBounds(300, 300, 400, 400);
         this._frame.add(this._pan);
         this._frame.setVisible(true);
     }
     
+    /*
+     * This method sets up the buttons a user can click.
+     */
     public void setupButtons() {
         this._lab = new JLabel("Count: 0");
         (this._btn = new JButton("Click me")).addActionListener(new JOPListener());
     }
-    
+    /*
+	 * This method sets up panels to hold all of the JLabels needed to hold the cards used in memory.
+	 * It also holds the buttons to start a new game and how many matches someone has made. 
+	 */
     private void setupPanels() {
         this._pan = new JPanel();
         this._pan2 = new JPanel();
