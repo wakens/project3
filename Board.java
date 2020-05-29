@@ -60,7 +60,7 @@ public class Board extends JPanel implements ActionListener
         Board.selectedCards = 0;
     }
     
-    // GETTER - get's the cell's location and returns that point.
+    // GETTERS
     private Point getCellLocation(final Cell aCell) {
         if (aCell == null) {
             error("getCellLocation(Cell) received null", true);
@@ -76,6 +76,41 @@ public class Board extends JPanel implements ActionListener
             }
         }
         return null;
+    }
+    private Cell getCellAtLoc(final Point point) {
+        if (point == null) {
+            error("getCellAtLoc( Point ) received null", true);
+            return null;
+        }
+        return this.mBoard[point.x][point.y];
+    }
+    
+    private Cell getCellAtLoc(final Point point) {
+        if (point == null) {
+            error("getCellAtLoc( Point ) received null", true);
+            return null;
+        }
+        return this.mBoard[point.x][point.y];
+    }
+    
+    // SETTERS
+    private void setImages() {
+        for (int row = 0; row < 4; ++row) {
+            for (int column = 0; column < 6; ++column) {
+                final URL file = this.getClass().getResource("/images/img-" + this.mCardStorage[column + 6 * row] + ".png");
+                if (file == null) {
+                    System.err.println("Board: setImages() reported error \"File not found\".");
+                    System.exit(-1);
+                }
+                final ImageIcon anImage = new ImageIcon(file);
+                this.mBoard[row][column].setIcon(anImage);
+            }
+        }
+    }
+    
+    private void setCardToVisible(final int x, final int y) {
+        this.mBoard[x][y].setSelected(true);
+        this.showCardImages();
     }
     
     // CONSTRUCTOR
@@ -97,7 +132,8 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
+     * This method initializes the board with all the card, allowing the user
+     * to take a peek at the cards before the game starts.
      */
     public void init() {
         this.resetMatchedImages();
@@ -108,7 +144,8 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
+     * This method resets the board without randomizing it, allowing the user
+     * to take another peek at the cards but restarting their progress.
      */
     public void reInit() {
         this.resetMatchedImages();
@@ -118,7 +155,7 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
+     * This method checks if the user has gotten all the pairs and has finished the game. 
      */
     public boolean isSolved() {
         for (int row = 0; row < 4; ++row) {
@@ -132,7 +169,7 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
+     * This private method adds the latest chosen card to chosenCards.
      */
     private void addToChose(final Cell aCard) {
         if (aCard != null) {
@@ -146,7 +183,9 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
+     * This method is used whenever an action is performed, overriding the method to select that cell
+     * and show that image until it is compared to a second image, when it is then compared to that
+     * second image to see if they're the same and the user has finished a pair.
      */
     @Override
     public void actionPerformed(final ActionEvent e) {
@@ -178,26 +217,8 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
-     */
-    private Cell getCellAtLoc(final Point point) {
-        if (point == null) {
-            error("getCellAtLoc( Point ) received null", true);
-            return null;
-        }
-        return this.mBoard[point.x][point.y];
-    }
-    
-    /*
-     *
-     */
-    private void setCardToVisible(final int x, final int y) {
-        this.mBoard[x][y].setSelected(true);
-        this.showCardImages();
-    }
-    
-    /*
-     *
+     * This private method is used at the start of the game that allows the user to see all the images
+     * for a brief moment before beginning the game.
      */
     private void peek() {
         final Action showImagesAction = new AbstractAction() {
@@ -214,24 +235,8 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
-     */
-    private void setImages() {
-        for (int row = 0; row < 4; ++row) {
-            for (int column = 0; column < 6; ++column) {
-                final URL file = this.getClass().getResource("/images/img-" + this.mCardStorage[column + 6 * row] + ".png");
-                if (file == null) {
-                    System.err.println("Board: setImages() reported error \"File not found\".");
-                    System.exit(-1);
-                }
-                final ImageIcon anImage = new ImageIcon(file);
-                this.mBoard[row][column].setIcon(anImage);
-            }
-        }
-    }
-    
-    /*
-     *
+     * This private method is an easy way to get each image, as it picks up an image
+     * and adds it to the board.
      */
     private void showImage(final int x, final int y) {
         final URL file = this.getClass().getResource("/images/img-" + this.mCardStorage[y + 6 * x] + ".png");
@@ -244,7 +249,8 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
+     * This private method shows the card images, setting up the board so that
+     * the user can start playing.
      */
     private void showCardImages() {
         for (int row = 0; row < 4; ++row) {
@@ -270,7 +276,8 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
+     * This private method generates a random file name, and since all the images have uniform names,
+     * it means a random image is picked to be on the board.
      */
     private String generateRandomImageFilename(final int max, final int min) {
         final Random random = new Random();
@@ -282,7 +289,7 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     *
+     * This private method returns a String array containing cards that are shuffled onto the board.
      */
     private String[] initCardStorage() {
         final String[] cardStorage = new String[24];
@@ -303,7 +310,7 @@ public class Board extends JPanel implements ActionListener
     }
     
     /*
-     * This private method 
+     * This private method goes through a random list to generate an array.
      */
     private String[] randomListWithoutRep() {
         final String[] generatedArray = new String[12];
