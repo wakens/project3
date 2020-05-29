@@ -20,12 +20,9 @@ import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
-// 
-// Decompiled by Procyon v0.5.36
-// 
-
 public class Board extends JPanel implements ActionListener
 {
+    // INSTANCE VARIABLES
     private static final String TAG = "Board: ";
     private static final long serialVersionUID = 1L;
     private static final int BOARD_BORDER_WIDTH = 20;
@@ -55,6 +52,7 @@ public class Board extends JPanel implements ActionListener
     private String[] mCardStorage;
     private Cell[] mCardChecker;
     
+    // This is just a way to have all the variables inside be static.
     static {
         Board.chosenCards = new ArrayList<Cell>();
         Board.numOfMatchedPairs = 0;
@@ -62,6 +60,25 @@ public class Board extends JPanel implements ActionListener
         Board.selectedCards = 0;
     }
     
+    // GETTER - get's the cell's location and returns that point.
+    private Point getCellLocation(final Cell aCell) {
+        if (aCell == null) {
+            error("getCellLocation(Cell) received null", true);
+            return null;
+        }
+        final Point p = new Point();
+        for (int column = 0; column < 4; ++column) {
+            for (int row = 0; row < 6; ++row) {
+                if (this.mBoard[column][row] == aCell) {
+                    p.setLocation(column, row);
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
+    
+    // CONSTRUCTOR
     public Board() {
         this.mBoard = null;
         this.mCardStorage = this.initCardStorage();
@@ -79,6 +96,9 @@ public class Board extends JPanel implements ActionListener
         this.init();
     }
     
+    /*
+     *
+     */
     public void init() {
         this.resetMatchedImages();
         resetBoardParam();
@@ -87,6 +107,9 @@ public class Board extends JPanel implements ActionListener
         this.setImages();
     }
     
+    /*
+     *
+     */
     public void reInit() {
         this.resetMatchedImages();
         resetBoardParam();
@@ -94,6 +117,9 @@ public class Board extends JPanel implements ActionListener
         this.setImages();
     }
     
+    /*
+     *
+     */
     public boolean isSolved() {
         for (int row = 0; row < 4; ++row) {
             for (int column = 0; column < 6; ++column) {
@@ -105,6 +131,9 @@ public class Board extends JPanel implements ActionListener
         return true;
     }
     
+    /*
+     *
+     */
     private void addToChose(final Cell aCard) {
         if (aCard != null) {
             if (!Board.chosenCards.contains(aCard)) {
@@ -116,6 +145,9 @@ public class Board extends JPanel implements ActionListener
         }
     }
     
+    /*
+     *
+     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e == null) {
@@ -145,6 +177,9 @@ public class Board extends JPanel implements ActionListener
         }
     }
     
+    /*
+     *
+     */
     private Cell getCellAtLoc(final Point point) {
         if (point == null) {
             error("getCellAtLoc( Point ) received null", true);
@@ -153,11 +188,17 @@ public class Board extends JPanel implements ActionListener
         return this.mBoard[point.x][point.y];
     }
     
+    /*
+     *
+     */
     private void setCardToVisible(final int x, final int y) {
         this.mBoard[x][y].setSelected(true);
         this.showCardImages();
     }
     
+    /*
+     *
+     */
     private void peek() {
         final Action showImagesAction = new AbstractAction() {
             private static final long serialVersionUID = 1L;
@@ -172,6 +213,9 @@ public class Board extends JPanel implements ActionListener
         timer.start();
     }
     
+    /*
+     *
+     */
     private void setImages() {
         for (int row = 0; row < 4; ++row) {
             for (int column = 0; column < 6; ++column) {
@@ -186,6 +230,9 @@ public class Board extends JPanel implements ActionListener
         }
     }
     
+    /*
+     *
+     */
     private void showImage(final int x, final int y) {
         final URL file = this.getClass().getResource("/images/img-" + this.mCardStorage[y + 6 * x] + ".png");
         if (file == null) {
@@ -196,6 +243,9 @@ public class Board extends JPanel implements ActionListener
         this.mBoard[x][y].setIcon(anImage);
     }
     
+    /*
+     *
+     */
     private void showCardImages() {
         for (int row = 0; row < 4; ++row) {
             for (int column = 0; column < 6; ++column) {
@@ -219,6 +269,9 @@ public class Board extends JPanel implements ActionListener
         }
     }
     
+    /*
+     *
+     */
     private String generateRandomImageFilename(final int max, final int min) {
         final Random random = new Random();
         final Integer aNumber = min + random.nextInt(max);
@@ -228,6 +281,9 @@ public class Board extends JPanel implements ActionListener
         return aNumber.toString();
     }
     
+    /*
+     *
+     */
     private String[] initCardStorage() {
         final String[] cardStorage = new String[24];
         String[] firstPair = new String[12];
@@ -246,6 +302,9 @@ public class Board extends JPanel implements ActionListener
         return cardStorage;
     }
     
+    /*
+     * This private method 
+     */
     private String[] randomListWithoutRep() {
         final String[] generatedArray = new String[12];
         final ArrayList<String> generated = new ArrayList<String>();
@@ -260,23 +319,10 @@ public class Board extends JPanel implements ActionListener
         return generatedArray;
     }
     
-    private Point getCellLocation(final Cell aCell) {
-        if (aCell == null) {
-            error("getCellLocation(Cell) received null", true);
-            return null;
-        }
-        final Point p = new Point();
-        for (int column = 0; column < 4; ++column) {
-            for (int row = 0; row < 6; ++row) {
-                if (this.mBoard[column][row] == aCell) {
-                    p.setLocation(column, row);
-                    return p;
-                }
-            }
-        }
-        return null;
-    }
-    
+    /*
+     * This private method checks if the user has selected the same cell,
+     * rather than them selecting a different one to compare the first to.
+     */
     private boolean sameCellPosition(final Point firstCell, final Point secondCell) {
         if (firstCell != null && secondCell != null) {
             return firstCell.equals(secondCell);
@@ -293,6 +339,10 @@ public class Board extends JPanel implements ActionListener
         return false;
     }
     
+    /*
+     * This private method uses the two selected cards and checks if they match. If they don't,
+     * it adds to the amount of failed attempts. 
+     */
     private void setSelectedCards(final Cell firstCell, final Cell secondCell) {
         if (firstCell == null || secondCell == null) {
             if (firstCell == null) {
@@ -325,6 +375,9 @@ public class Board extends JPanel implements ActionListener
         resetSelectedCards();
     }
     
+    /*
+     * This private method checks whether the card is null. If it isn't it returns true. 
+     */
     private boolean isCardValid(final Cell aCard) {
         if (aCard == null) {
             error("isCardValid(Cell) received null", false);
@@ -333,6 +386,10 @@ public class Board extends JPanel implements ActionListener
         return !aCard.isEmpty();
     }
     
+    /*
+     * This private method is the final message the user sees after completing the memory game. 
+     * It displays the failed attempts and error percentage.
+     */
     private void finalMessage() {
         final Action showImagesAction = new AbstractAction() {
             @Override
@@ -349,6 +406,9 @@ public class Board extends JPanel implements ActionListener
         timer.start();
     }
     
+    /*
+     * This private method resets the matched images.
+     */
     private void resetMatchedImages() {
         for (int row = 0; row < 4; ++row) {
             for (int column = 0; column < 6; ++column) {
@@ -359,6 +419,9 @@ public class Board extends JPanel implements ActionListener
         }
     }
     
+    /*
+     * This private method checks if there's an error in the board.
+     */
     private static void error(final String message, final boolean crash) {
         System.err.println("Board: " + message);
         if (crash) {
@@ -366,18 +429,30 @@ public class Board extends JPanel implements ActionListener
         }
     }
     
+    /*
+     * This private method resets the cards that have been selected.
+     */
     private static void resetSelectedCards() {
         Board.selectedCards = 0;
     }
     
+    /*
+     * This private method resets the number of pairs that have already been matched.
+     */
     private static void resetNumMatchedCards() {
         Board.numOfMatchedPairs = 0;
     }
     
+    /*
+     * This private method resets the amount of attempts.
+     */
     private static void resetFailedAttempts() {
         Board.numOfFailedAttempts = 0;
     }
     
+    /*
+     * This private method resets the board completely.
+     */
     private static void resetBoardParam() {
         resetFailedAttempts();
         resetNumMatchedCards();
