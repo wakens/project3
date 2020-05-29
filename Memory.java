@@ -8,12 +8,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-// 
-// Decompiled by Procyon v0.5.36
-// 
-
 public class Memory extends JFrame
 {
+    // INSTANCE VARIABLES
     private static final long serialVersionUID = 1L;
     static Window w;
     static String[] FIRST;
@@ -25,6 +22,7 @@ public class Memory extends JFrame
     private JSplitPane mSplitPane;
     private MouseListener btnMouseListener;
     
+    // This is just a way to have all the variables inside be static.
     static {
         Memory.w = new Window();
         Memory.FIRST = new String[] { "START GAME", "HELP", "WHAT IS DANGANRONPA", "PASSWORD", "QUIT" };
@@ -32,6 +30,7 @@ public class Memory extends JFrame
         Memory.quit = false;
     }
     
+    // CONSTRUCTOR
     public Memory() {
         this.btnMouseListener = new MouseAdapter() {
             @Override
@@ -59,11 +58,26 @@ public class Memory extends JFrame
         this.setVisible(true);
     }
     
+    /*
+     * This method displays the first question the user is asked and returns
+     * their input, it is used in the main method. 
+     */
     public static int choice1() {
         final int choice1 = Memory.w.option(Memory.FIRST, "Welcome to Amanda's Danganronpa memory game!\n To start the game, choose start game. \n If you don't know how to play memory choose help. \n If you don't know about danganronpa, choose what is danganronpa.\n If you have a special password input it in passwords, you can find passwords through clues on the \"What Is Danganronpa\" tab.\n If you'd like to quit the game, choose quit.");
         return choice1;
     }
     
+    /*
+     * This method, main, goes through the memory game.
+     * First, it introduces the game and allows the user to choose between 4 options:
+     * START GAME: Begins the memory game.
+     * HELP: Further explains the game for those that are unfamiliar with memory and how to play it.
+     * WHAT IS DANGANRONPA: Explains what Danganronpa is to the user, as well as gives a hint to what the passwords might be.
+     * PASSWORD: Allows the user to input a password 'hope' or 'despair' that either win the game for them or cause
+     *           them to lose. 
+     * After starting the game and completing it you get the amount of times you failed to match, as well as a percentage
+     * to motivate the player into doing the game again and doing better than they did before.
+     */
     public static void main(final String[] args) throws InterruptedException {
         int choice1 = choice1();
         while (!Memory.quit) {
